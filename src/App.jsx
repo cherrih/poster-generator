@@ -8,7 +8,8 @@ class App extends React.Component {
       currImage: null,
       colors: ['red', 'purple', 'blue', 'green'],
       lastX: 0,
-      lastY: 0
+      lastY: 0,
+      image: null
     };
     this.canvasRef = React.createRef();
     this.onImageClick = this.onImageClick.bind(this);
@@ -16,6 +17,7 @@ class App extends React.Component {
     this.onColorClick = this.onColorClick.bind(this);
     this.onCanvasMouseOver = this.onCanvasMouseOver.bind(this);
     this.onCanvasMouseEnter = this.onCanvasMouseEnter.bind(this);
+    this.saveImage = this.saveImage.bind(this);
   }
 
   onImageClick(e) {
@@ -94,6 +96,10 @@ class App extends React.Component {
       lastY: e.pageY
     })
   }
+  saveImage() {
+    let image = this.canvasRef.current.toDataURL('image/png');
+    this.setState({ image });
+  }
 
   render() {
     return (
@@ -105,7 +111,12 @@ class App extends React.Component {
           <div className="colorStyle" id="red" style={{backgroundColor: 'red'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="pink" style={{backgroundColor: 'pink'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="green" style={{backgroundColor: 'green'}} onClick={this.onColorClick} />
+          <div className="colorStyle" id="yellow" style={{backgroundColor: 'yellow'}} onClick={this.onColorClick} />
+          <div className="colorStyle" id="white" style={{backgroundColor: 'white'}} onClick={this.onColorClick} />
+          <div className="colorStyle" id="black" style={{backgroundColor: 'black'}} onClick={this.onColorClick} />
         </div>
+        <div onClick={this.saveImage}>Save me!</div>
+        <img src={this.state.image}/>
       </>
     );
   }

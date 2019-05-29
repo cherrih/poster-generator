@@ -115,6 +115,7 @@ class App extends React.Component {
       <>
         <canvas width="500" height="500" ref={this.canvasRef} onClick={this.onCanvasClick} onMouseEnter={this.onCanvasMouseEnter} onMouseMove={this.onCanvasMouseOver}/>
         <img src="../public/shy.jpg" onClick={this.onImageClick}/>
+        <img src="../public/human.jpg" onClick={this.onImageClick}/>
         <div className="colorWheels">
           <div className="colorStyle" id="blue" style={{backgroundColor: 'blue'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="red" style={{backgroundColor: 'red'}} onClick={this.onColorClick} />
@@ -124,6 +125,7 @@ class App extends React.Component {
           <div className="colorStyle" id="white" style={{backgroundColor: 'white'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="black" style={{backgroundColor: 'black'}} onClick={this.onColorClick} />
           <button onClick={this.toggleDraw}>{isDrawing ? 'stop drawing' : 'let me draw'}</button>
+          <button>reset</button>
         </div>
         <button onClick={this.saveImage}>Save me!</button>
         <img src={image}/>

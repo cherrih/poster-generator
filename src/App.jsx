@@ -5,6 +5,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       isImagePlacer: false,
+      isDrawing: true,
       currImage: null,
       colors: ['red', 'purple', 'blue', 'green'],
       lastX: 0,
@@ -18,12 +19,14 @@ class App extends React.Component {
     this.onCanvasMouseOver = this.onCanvasMouseOver.bind(this);
     this.onCanvasMouseEnter = this.onCanvasMouseEnter.bind(this);
     this.saveImage = this.saveImage.bind(this);
+    this.toggleDraw = this.toggleDraw.bind(this);
   }
 
   onImageClick(e) {
     this.setState({
       isImagePlacer: true,
-      currImage: e.target
+      currImage: e.target,
+      isDrawing: false
     })
   }
 
@@ -70,8 +73,8 @@ class App extends React.Component {
   }
 
   onCanvasMouseOver(e) {
-    const { lastX, lastY, isImagePlacer } = this.state;
-    if (isImagePlacer) return;
+    const { lastX, lastY, isImagePlacer, isDrawing } = this.state;
+    if (isImagePlacer || !isDrawing) return;
     const canvas = this.canvasRef.current;
     const context = canvas.getContext('2d');
     context.beginPath();
@@ -100,8 +103,14 @@ class App extends React.Component {
     let image = this.canvasRef.current.toDataURL('image/png');
     this.setState({ image });
   }
+  toggleDraw() {
+    this.setState({
+      isDrawing: !this.state.isDrawing
+    })
+  }
 
   render() {
+    const { image, isDrawing } = this.state;
     return (
       <>
         <canvas width="500" height="500" ref={this.canvasRef} onClick={this.onCanvasClick} onMouseEnter={this.onCanvasMouseEnter} onMouseMove={this.onCanvasMouseOver}/>
@@ -114,9 +123,10 @@ class App extends React.Component {
           <div className="colorStyle" id="yellow" style={{backgroundColor: 'yellow'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="white" style={{backgroundColor: 'white'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="black" style={{backgroundColor: 'black'}} onClick={this.onColorClick} />
+          <button onClick={this.toggleDraw}>{isDrawing ? 'stop drawing' : 'let me draw'}</button>
         </div>
-        <div onClick={this.saveImage}>Save me!</div>
-        <img src={this.state.image}/>
+        <button onClick={this.saveImage}>Save me!</button>
+        <img src={image}/>
       </>
     );
   }

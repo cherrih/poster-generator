@@ -20,6 +20,7 @@ class App extends React.Component {
     this.onCanvasMouseEnter = this.onCanvasMouseEnter.bind(this);
     this.saveImage = this.saveImage.bind(this);
     this.toggleDraw = this.toggleDraw.bind(this);
+    this.clearCanvas = this.clearCanvas.bind(this);
   }
 
   onImageClick(e) {
@@ -99,14 +100,22 @@ class App extends React.Component {
       lastY: e.pageY
     })
   }
+
   saveImage() {
     let image = this.canvasRef.current.toDataURL('image/png');
     this.setState({ image });
   }
+
   toggleDraw() {
     this.setState({
       isDrawing: !this.state.isDrawing
     })
+  }
+
+  clearCanvas() {
+    const canvas = this.canvasRef.current;
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   render() {
@@ -125,7 +134,7 @@ class App extends React.Component {
           <div className="colorStyle" id="white" style={{backgroundColor: 'white'}} onClick={this.onColorClick} />
           <div className="colorStyle" id="black" style={{backgroundColor: 'black'}} onClick={this.onColorClick} />
           <button onClick={this.toggleDraw}>{isDrawing ? 'stop drawing' : 'let me draw'}</button>
-          <button>reset</button>
+          <button onClick={this.clearCanvas}>reset</button>
         </div>
         <button onClick={this.saveImage}>Save me!</button>
         <img src={image}/>

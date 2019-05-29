@@ -27,7 +27,7 @@ class App extends React.Component {
       const ctx = canvas.getContext('2d');
       const width = canvas.width;
       const height = canvas.height;
-      ctx.drawImage(currImage, e.pageX, e.pageY);
+      ctx.drawImage(currImage, (e.pageX - (.5 * currImage.width)), (e.pageY - (.5 * currImage.height)));
       this.setState({
         isImagePlacer: false,
         currImage: null

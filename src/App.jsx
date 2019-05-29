@@ -6,7 +6,7 @@ class App extends React.Component {
     this.state = {
       isImagePlacer: false,
       currImage: null,
-      colors: [],
+      colors: ['red', 'purple', 'blue', 'green'],
       lastX: 0,
       lastY: 0
     };
@@ -28,11 +28,8 @@ class App extends React.Component {
   onCanvasClick(e) {
     const { currImage, isImagePlacer } = this.state;
     if (isImagePlacer) {
-      // add pic to canvas at e.pageX, e.pageY
       const canvas = this.canvasRef.current;
       const ctx = canvas.getContext('2d');
-      const width = canvas.width;
-      const height = canvas.height;
       ctx.drawImage(currImage, (e.pageX - (.5 * currImage.width)), (e.pageY - (.5 * currImage.height)));
       this.setState({
         isImagePlacer: false,
@@ -48,24 +45,40 @@ class App extends React.Component {
     if (colors.length < 5) {
       newColors = colors.concat(color);
     } else {
-      colors.unshift();
+      colors.shift();
       newColors = colors.concat(color);
     }
     this.setState({
       colors: newColors
     });
   }
+  getGradient(context) {
+    const { colors, lastX, lastY } = this.state;
+    const gradient = context.createLinearGradient(lastX - 100, lastY - 100, lastX + 100, lastY + 100);
+    let j = 0;
+    let coord = 0;
+    for (let i = 0; i < 5; i ++) {
+      if (j > colors.length - 1) j = 0;
+      gradient.addColorStop(coord, colors[j]);
+      coord += 0.2;
+      gradient.addColorStop(coord, colors[j]);
+      j++;
+    }
+    return gradient;
+  }
 
   onCanvasMouseOver(e) {
-    console.log('mousing');
+    const { lastX, lastY, isImagePlacer } = this.state;
+    if (isImagePlacer) return;
     const canvas = this.canvasRef.current;
     const context = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
     context.beginPath();
-    context.strokeStyle = "#000";
-    context.lineWidth = 2;
-    context.moveTo(this.state.lastX, this.state.lastY);
+    const gradient = this.getGradient(context);
+    context.strokeStyle = gradient;
+    context.lineWidth = 200;
+    context.lineJoin = 'bevel';
+    context.lineCap = 'round';
+    context.moveTo(lastX, lastY);
     context.lineTo(e.pageX, e.pageY);
     context.stroke();
     context.closePath();
